@@ -1,0 +1,41 @@
+# ---------------------------------------------------------------------------
+# SocialScope AI — backend runtime requirements
+# Install with:  pip install -r requirements.txt
+# ---------------------------------------------------------------------------
+
+# ---- Web framework --------------------------------------------------------
+fastapi>=0.115,<1.0
+uvicorn[standard]>=0.30,<1.0
+pydantic>=2.7,<3.0
+pydantic-settings>=2.2,<3.0
+python-dotenv>=1.0,<2.0
+python-multipart>=0.0.9,<1.0
+
+# ---- Persistence ----------------------------------------------------------
+SQLAlchemy>=2.0,<3.0
+
+# ---- Data collection (official platform APIs) ----------------------------
+httpx>=0.27,<1.0
+
+# ---- NLP / sentiment ------------------------------------------------------
+vaderSentiment>=3.3,<4.0
+textblob>=0.18,<1.0
+
+# ---- Exports --------------------------------------------------------------
+openpyxl>=3.1,<4.0
+reportlab>=4.2,<5.0
+
+# ---- Development / testing ------------------------------------------------
+pytest>=8.0,<9.0
+
+# ---------------------------------------------------------------------------
+# NOTE ON THE FULL DAE STACK
+#
+# requirements-optional.txt lists the wider academic data stack (pandas, numpy,
+# scikit-learn, nltk, matplotlib, seaborn, plotly, XlsxWriter, PostgreSQL driver).
+#
+# The analysis pipeline in app/analysis/ is implemented in dependency-free Python
+# so that the statistical and sentiment results are reproducible without a heavy
+# scientific install. Pandas/numpy are NOT imported by the runtime pipeline.
+# Install the optional set only if you intend to extend the pipeline.
+# ---------------------------------------------------------------------------

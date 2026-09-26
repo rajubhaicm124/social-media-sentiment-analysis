@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="SocialScope AI — analyse public social-media data, measure sentiment and engagement, and export clean datasets."
+    />
+    <title>SocialScope AI — Social Media Sentiment &amp; Analytics</title>
+    <script>
+      // Apply the saved theme before first paint to avoid a flash of light mode.
+      (function () {
+        try {
+          var stored = localStorage.getItem('socialscope.theme')
+          var theme = stored === 'light' || stored === 'dark'
+            ? stored
+            : window.matchMedia('(prefers-color-scheme: light)').matches
+              ? 'light'
+              : 'dark'
+          document.documentElement.classList.toggle('dark', theme === 'dark')
+        } catch (e) {}
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

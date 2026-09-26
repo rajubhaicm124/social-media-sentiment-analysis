@@ -1,0 +1,32 @@
+# ---------------------------------------------------------------------------
+# SocialScope AI — optional extras
+#
+# The runtime pipeline does NOT require these. Install them only if you want to
+# extend the analysis with the wider academic data stack:
+#
+#   pip install -r requirements-optional.txt
+# ---------------------------------------------------------------------------
+
+# Tabular dataframes — useful for further EDA in a notebook.
+pandas>=2.1,<3.0
+numpy>=1.26,<3.0
+
+# Topic modelling / clustering experiments on the cleaned dataset.
+scikit-learn>=1.3,<2.0
+
+# Stopword corpora and tokenizers. TextBlob already ships polarity data, but
+# nltk corpora are needed if you add nltk-based preprocessing.
+nltk>=3.8,<4.0
+
+# Server-rendered chart images for the PDF report.
+matplotlib>=3.8,<4.0
+seaborn>=0.13,<1.0
+
+# Interactive charting from Python (optional notebook analysis).
+plotly>=5.20,<7.0
+
+# Alternative Excel writer (openpyxl is already used for the styled workbook).
+XlsxWriter>=3.2,<4.0
+
+# PostgreSQL driver — only needed when DATABASE_URL points at PostgreSQL.
+# psycopg[binary]>=3.2,<4.0

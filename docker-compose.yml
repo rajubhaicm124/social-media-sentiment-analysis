@@ -1,0 +1,69 @@
+# SocialScope AI — local development stack
+#
+#   docker compose up --build               # SQLite (default)
+#   docker compose --profile postgres up    # with PostgreSQL
+#
+# API      -> http://localhost:8000  (docs at /docs)
+# Frontend -> http://localhost:5173
+
+services:
+  api:
+    build:
+      context: ./backend
+    environment:
+      ENVIRONMENT: development
+      DEBUG: "false"
+      # Supply real credentials through backend/.env or these values.
+      YOUTUBE_API_KEY: ${YOUTUBE_API_KEY:-}
+      FACEBOOK_ACCESS_TOKEN: ${FACEBOOK_ACCESS_TOKEN:-}
+      INSTAGRAM_ACCESS_TOKEN: ${INSTAGRAM_ACCESS_TOKEN:-}
+      META_API_VERSION: ${META_API_VERSION:-v21.0}
+      DATABASE_URL: ${DATABASE_URL:-}
+      CORS_ORIGINS: http://localhost:5173,http://127.0.0.1:5173
+      RATE_LIMIT_REQUESTS: ${RATE_LIMIT_REQUESTS:-30}
+      RATE_LIMIT_WINDOW_SECONDS: ${RATE_LIMIT_WINDOW_SECONDS:-60}
+      MAX_COMMENT_PAGES: ${MAX_COMMENT_PAGES:-5}
+      ENABLE_DEMO_MODE: "true"
+    volumes:
+      # Persist the SQLite database and generated artefacts.
+      - ./data:/app/data
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request;urllib.request.urlopen('http://localhost:8000/api/health')"]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  web:
+    build:
+      context: ./frontend
+      args:
+        # Baked in at build time; leave empty to use the reverse proxy below.
+        VITE_API_URL: ${VITE_API_URL:-}
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "5173:80"
+
+  postgres:
+    profiles: ["postgres"]
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-socialscope}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-socialscope}
+      POSTGRES_DB: ${POSTGRES_DB:-socialscope}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-socialscope}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
